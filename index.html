@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公司點餐系統 | Internal Ordering Tool</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="all.css">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Google API Client Library -->
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+</head>
+<body>
+    <!-- 讀取遮罩 -->
+    <div id="loadingMask" class="mask hidden">
+        <div class="loader"></div>
+        <p>處理中...</p>
+    </div>
+
+    <div class="app-container">
+        <!-- 登入頁面 -->
+        <section id="loginView" class="view">
+            <div class="login-card">
+                <img src="media/hero.png" alt="點餐英雄" class="hero-img">
+                <h1>🍱 公司點餐系統</h1>
+                <p>請先登入 Google 帳號以開始訂餐</p>
+                <button id="loginBtn" class="btn btn-primary btn-lg">
+                    <img src="https://www.gstatic.com/images/branding/googleg/1x/googleg_standard_color_128dp.png" alt="Google Logo" width="20">
+                    使用 Google 登入
+                </button>
+            </div>
+        </section>
+
+        <!-- 主功能頁面 -->
+        <section id="mainView" class="view hidden">
+            <header>
+                <div class="user-info">
+                    <span id="userName">載入中...</span>
+                    <span id="userRole" class="badge">一般成員</span>
+                </div>
+                <button id="logoutBtn" class="btn btn-ghost">登出</button>
+            </header>
+
+            <nav class="tab-nav">
+                <button class="tab-item active" data-view="orderView">我要點餐</button>
+                <button class="tab-item" data-view="myOrderView">我的餐點</button>
+                <button class="tab-item" data-view="confirmView">今日訂單</button>
+                <button id="adminTab" class="tab-item hidden" data-view="adminView">管理專區</button>
+            </nav>
+
+            <div class="tab-content">
+                <!-- 點餐區 -->
+                <div id="orderView" class="tab-pane active">
+                    <div class="header-status">
+                        <h2>今日開放餐廳</h2>
+                        <div class="header-actions">
+                            <div id="activeRestaurants" class="restaurant-tags">
+                                <!-- 動態插入今日開放的餐廳 -->
+                            </div>
+                            <span id="orderStatusLabel" class="status-pill">讀取中...</span>
+                        </div>
+                    </div>
+                    <div id="menuGrid" class="menu-grid">
+                        <!-- 動態插入餐點卡片 -->
+                    </div>
+                </div>
+
+                <!-- 我的餐點區 -->
+                <div id="myOrderView" class="tab-pane">
+                    <div class="section-header">
+                        <h2>我的專屬餐點</h2>
+                        <div class="total-amount-pill">個人總計金額：<span id="myTotalAmountDisplay">$0</span></div>
+                    </div>
+                    <div class="order-list-container">
+                        <table id="myOrderTable">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>餐廳</th>
+                                    <th>餐點內容</th>
+                                    <th>總計</th>
+                                    <th>備註</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myOrderListBody">
+                                <!-- 動態插入 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 確認訂單區 -->
+                <div id="confirmView" class="tab-pane">
+                    <div class="section-header">
+                        <h2>今日訂單彙整</h2>
+                        <button id="copyOrderBtn" class="btn btn-secondary">一鍵複製 (LINE 格式)</button>
+                        <div class="total-amount-pill">總計金額：<span id="totalAmountDisplay">$0</span></div>
+                    </div>
+                    <div class="order-list-container">
+                        <table id="orderTable">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>訂購人</th>
+                                    <th>餐點內容</th>
+                                    <th>總計</th>
+                                    <th>備註</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderListBody">
+                                <!-- 動態插入訂單 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 管理專區 (僅管理員可用) -->
+                <div id="adminView" class="tab-pane">
+                    <div class="admin-section">
+                        <h3>訂單狀態控制</h3>
+                        <p id="currentStatusDesc">目前狀態：讀取中</p>
+                        <button id="toggleOrderBtn" class="btn btn-secondary" style="margin-top: 10px;">切換收單狀態</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3>設定今日餐廳</h3>
+                        <div id="restaurantSettings" class="checkbox-group">
+                            <!-- 動態插入所有可選餐廳 -->
+                        </div>
+                        <button id="saveConfigBtn" class="btn btn-primary" style="margin-top: 10px; width: 100%;">更新今日餐廳</button>
+                    </div>
+
+                    <div class="admin-danger-zone">
+                        <button id="clearOrdersBtn" class="btn btn-danger">🔥 清空今日點餐</button>
+                        <p>此動作將永久刪除「今日」所有點餐記錄。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 腳本 -->
+    <script src="all.js"></script>
+</body>
+</html>
