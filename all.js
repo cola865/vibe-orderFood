@@ -6,7 +6,7 @@ const CONFIG = {
     CLIENT_ID: '415971804460-9fp8s295pnf0odolbs4mkhte5iqo34ie.apps.googleusercontent.com',
     API_KEY: 'AIzaSyAc59MDK3cy-62QbATDh9ZEoS8ciaHYUXc',
     SPREADSHEET_ID: '1MAhpBxQpdxx39J_5KLSl3v-BJ7EaL6WLP-FKuts87dA',
-    SCOPES: 'https://www.googleapis.com/auth/spreadsheets',
+    SCOPES: 'https://www.googleapis.com/auth/spreadsheets email profile',
     DISCOVERY_DOCS: ['https://sheets.googleapis.com/$discovery/rest?version=v4']
 };
 
