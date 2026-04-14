@@ -29,7 +29,6 @@ async function loadUserData() {
             fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${gapi.client.getToken().access_token}` } }).then(res => res.json())
         ]);
         const userEmail = (info.email || '').trim().toLowerCase();
-        alert(`[DEBUG] 你登入的 Google 帳號是：\n${userEmail}\n\n若顯示未授權，請將此 email 加入 Users 分頁 B 欄`);
         const rows = uResp.result.values || [];
         const matched = rows.find(row => (row[1] || '').trim().toLowerCase() === userEmail);
         if (!matched) { 
