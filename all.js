@@ -28,8 +28,14 @@ async function loadUserData() {
             gapi.client.sheets.spreadsheets.values.get({ spreadsheetId: CONFIG.SPREADSHEET_ID, range: 'Users!A2:C' }),
             fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${gapi.client.getToken().access_token}` } }).then(res => res.json())
         ]);
-        const matched = uResp.result.values.find(row => row[1] === info.email);
-        if (!matched) { alert('未授權'); return; }
+        const userEmail = (info.email || '').trim().toLowerCase();
+        alert(`[DEBUG] 你登入的 Google 帳號是：\n${userEmail}\n\n若顯示未授權，請將此 email 加入 Users 分頁 B 欄`);
+        const rows = uResp.result.values || [];
+        const matched = rows.find(row => (row[1] || '').trim().toLowerCase() === userEmail);
+        if (!matched) { 
+            alert(`未授權！\n您的登入帳號 (${userEmail}) 不在系統白名單內。\n請聯繫管理員確認 Users 分頁中 B 欄的 Email 是否正確。`); 
+            return; 
+        }
         currentUser = { name: matched[0], email: matched[1], role: matched[2] };
         document.getElementById('userName').innerText = currentUser.name;
         if (currentUser.role === '管理員') document.getElementById('adminTab').classList.remove('hidden');
